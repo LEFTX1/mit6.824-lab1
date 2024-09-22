@@ -1,33 +1,32 @@
+// rpc.go
+
 package mr
 
-//
-// RPC定义。
-//
-// 记得将所有名称首字母大写。
-//
-
-import "os"
-import "strconv"
-
-//
-// 示例，展示如何声明RPC的参数
-// 和回复。
-//
-
-type ExampleArgs struct {
-	X int
+// 定义键值对结构体，用于Map和Reduce阶段
+type KeyValue struct {
+	Key   string
+	Value string
 }
 
-type ExampleReply struct {
-	Y int
+// 请求任务参数结构体
+type ReqTaskArgs struct {
+	WorkerStatus bool // 当前Worker在线，可以接受任务
 }
 
-// 在此处添加你的RPC定义。
+// 请求任务回复结构体
+type ReqTaskReply struct {
+	Task     Task // 返回一个任务
+	TaskDone bool // 是否完成所有任务
+}
 
-// 为master在/var/tmp中创建一个独特的UNIX域套接字名称。
-// 因为Athena AFS不支持UNIX域套接字，所以不能使用当前目录。
-func masterSock() string {
-	s := "/var/tmp/824-mr-"
-	s += strconv.Itoa(os.Getuid())
-	return s
+// 报告任务参数结构体
+type ReportTaskArgs struct {
+	WorkerStatus bool // 当前Worker在线
+	TaskIndex    int  // 任务索引
+	IsDone       bool // 任务是否完成
+}
+
+// 报告任务回复结构体
+type ReportTaskReply struct {
+	MasterAck bool // Master确认是否成功处理报告
 }
